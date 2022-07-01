@@ -17,7 +17,7 @@ const image = {
   uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
 };
 
-const PersonajesPage = ({ navigation }) => {
+const Favoritos = ({ navigation }) => {
   const [personajes, setPersonajes] = useState([]);
   const [page, setPage] = useState(1);
   const [searchParam, setParam] = useState([]);
@@ -82,33 +82,19 @@ const PersonajesPage = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <ImageBackground source={image} resizeMode='cover' style={styles.image}>
         <View style={styles.searchContainer}>
-          <Text style={styles.title}>Personajes</Text>
-
-          <TextInput
-            style={styles.input}
-            onChangeText={setParam}
-            placeholder={placeholder}
-            placeholderTextColor='#fff'
-          />
-          <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.btn} onPress={filter}>
-              <Text style={{ fontSize: 11, letterSpacing:5, fontWeight:'bold' }}>BUSCAR</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btn} onPress={clear}>
-              <Text style={{ fontSize: 11, letterSpacing:5 , fontWeight:'bold'}}>CLEAR</Text>
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.title}>Mis favoritos</Text>
 
           <View style={styles.personajesContainer}>
             <View contentContainerStyle={styles.scroll}>
-              <FlatList
+              <Text>Holaaaaaa</Text>
+              {/* <FlatList
                 data={personajes}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 onEndReached={handleLoadMore}
                 onEndReachedThreshold={0.5}
                 ListFooterComponent={renderFooter}
-              />
+              /> */}
             </View>
           </View>
         </View>
@@ -117,7 +103,7 @@ const PersonajesPage = ({ navigation }) => {
   );
 };
 
-export default PersonajesPage;
+export default Favoritos;
 
 const styles = StyleSheet.create({
   container: {

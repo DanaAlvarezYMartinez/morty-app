@@ -24,7 +24,7 @@ const PersonajeItem = ({ navigation, personaje }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    width: '100%',
+    width: 300,
     padding: 16,
     height: 150,
     borderRadius: 16,

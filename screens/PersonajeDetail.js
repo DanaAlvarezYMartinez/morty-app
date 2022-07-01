@@ -7,9 +7,14 @@ import {
   SafeAreaView,
   TouchableHighlight,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 import axios from 'axios';
 import List from '../components/List';
+
+const image = {
+  uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
+};
 
 const PersonajeDetail = ({ route, navigation }) => {
   const { url } = route.params;
@@ -41,31 +46,33 @@ const PersonajeDetail = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.personajeContainer}>
-        <View style={styles.imageContainer}>
-          <Text style={styles.name}>{personaje.name}</Text>
-          <Image source={{ uri: personaje.image }} style={styles.img}></Image>
-          <View style={styles.infoContainer}>
-            <Text style={styles.text}>Especie: {personaje.species}</Text>
-            <Text style={styles.text}>
-              Tipo: {personaje.type === '' ? 'unknown' : personaje.type}
-            </Text>
-            <TouchableHighlight onPress={locationDetails}>
-              <View>
-                <Text style={styles.location}>Location: </Text>
-              </View>
-            </TouchableHighlight>
+      <ImageBackground source={image} resizeMode='cover' style={styles.image}>
+        <View style={styles.personajeContainer}>
+          <View style={styles.imageContainer}>
+            <Text style={styles.name}>{personaje.name}</Text>
+            <Image source={{ uri: personaje.image }} style={styles.img}></Image>
+            <View style={styles.infoContainer}>
+              <Text style={styles.text}>Especie: {personaje.species}</Text>
+              <Text style={styles.text}>
+                Tipo: {personaje.type === '' ? 'unknown' : personaje.type}
+              </Text>
+              <TouchableHighlight onPress={locationDetails}>
+                <View>
+                  <Text style={styles.location}>Location: </Text>
+                </View>
+              </TouchableHighlight>
+            </View>
+          </View>
+
+          <View style={styles.episodesContainer}>
+            <Text style={styles.episodioTitle}>Episodios</Text>
+
+            <ScrollView contentContainerStyle={styles.scroll}>
+              <List list={episodes}></List>
+            </ScrollView>
           </View>
         </View>
-
-        <View style={styles.episodesContainer}>
-          <Text style={styles.episodioTitle}>Episodios</Text>
-
-          <ScrollView contentContainerStyle={styles.scroll}>
-            <List list={episodes}></List>
-          </ScrollView>
-        </View>
-      </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -74,20 +81,20 @@ export default PersonajeDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#67dd23',
-    alignItems: 'center',
+  },
+  image: {
+    flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   personajeContainer: {
-    flex: 1,
-    width: '90%',
-    height: '95%',
+    width: '85%',
+    height: '80%',
     padding: 20,
     marginVertical: 20,
     backgroundColor: '#000',
     borderRadius: 16,
-    position: 'absolute',
+    marginTop:20,
   },
   imageContainer: {
     flex: 1,
@@ -100,7 +107,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     height: '40%',
-    marginTop:10,
+    marginTop: 10,
   },
   img: {
     width: '50%',
@@ -138,6 +145,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
-    marginTop:15,
+    marginTop: 15,
   },
 });

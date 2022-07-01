@@ -5,43 +5,54 @@ import {
   Text,
   View,
   SafeAreaView,
-  Image,
+  TextInput,
 } from 'react-native';
 import Btn from '../components/Btn';
-import Input from '../components/TextInput';
 import { AuthContext } from '../context/AuthContext';
 
 const image = {
-  uri: 'https://i.pinimg.com/originals/60/1c/71/601c715eee01e1faeda7ecc9ecf1677c.jpg',
+  uri: 'https://i.pinimg.com/564x/43/61/a8/4361a8b8912494b922a475923ef582fd.jpg',
 };
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('')
 
-  const {login} = useContext(AuthContext)
+  const { login } = useContext(AuthContext);
+
+  const validateEmail = () => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(email) === false) {
+      setError('¡Email no valido!');
+    }else{
+      login(userName);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={image} resizeMode='cover' style={styles.image}>
-        <View>
-          
-          <Input placeholder='Ingrese su nombre' />
-
-          <Input
-            placeholder='Ingrese su email'
+        <View style={styles.formContainer}>
+          <TextInput
+            style={styles.input}
+            onChangeText={setUserName}
+            placeholder='Ingrese su nombre'
+            placeholderTextColor='#000'
           />
 
-          {/* <Text style={styles.error}>{test}</Text> */}
+          <TextInput
+            style={styles.input}
+            placeholder='Ingrese su email'
+            onChangeText={setEmail}
+            placeholderTextColor='#000'
+          />
+
+          <Text style={styles.error}>{error}</Text>
 
           <Btn
             text='Iniciar Sesión'
-            onPress={() => {login()}}
-          />
-
-          <Btn
-            text='Registrarse'
-            onPress={() => {
-              navigation.navigate('Register');
-            }}
+            onPress={validateEmail}
           />
         </View>
       </ImageBackground>
@@ -60,8 +71,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  error:{
-    color:'red',
-    fontWeight:'bold',
-  }
+  error: {
+    color: 'red',
+    fontWeight: 'bold',
+  },
+  input: {
+    width: 230,
+    height: 40,
+    margin: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
+    padding: 10,
+    color: '#000',
+  },
+  formContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    alignItems: 'center',
+    padding: 10,
+    opacity: 0.9,
+  },
 });

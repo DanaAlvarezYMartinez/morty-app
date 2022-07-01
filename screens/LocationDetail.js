@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  ImageBackground,
+} from 'react-native';
 import axios from 'axios';
 import List from '../components/List';
+
+const image = {
+  uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
+};
 
 const LocationDetail = ({ route }) => {
   const { url } = route.params;
@@ -31,20 +42,22 @@ const LocationDetail = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.infoContainer}>
-        <View style={styles.information}>
-          <Text style={styles.name}>{location.name}</Text>
-          <Text style={styles.text}>Type: {location.type}</Text>
-          <Text style={styles.text}>Dimension: {location.dimension}</Text>
-          <View style={styles.residentsContainer}>
-            <Text style={styles.residentsTitle}>Residentes</Text>
+      <ImageBackground source={image} resizeMode='cover' style={styles.image}>
+        <View style={styles.infoContainer}>
+          <View style={styles.information}>
+            <Text style={styles.name}>{location.name}</Text>
+            <Text style={styles.text}>Type: {location.type}</Text>
+            <Text style={styles.text}>Dimension: {location.dimension}</Text>
+            <View style={styles.residentsContainer}>
+              <Text style={styles.residentsTitle}>Residentes</Text>
 
-            <ScrollView contentContainerStyle={styles.scroll}>
-              <List list={residents}></List>
-            </ScrollView>
+              <ScrollView contentContainerStyle={styles.scroll}>
+                <List list={residents}></List>
+              </ScrollView>
+            </View>
           </View>
         </View>
-      </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -54,20 +67,20 @@ export default LocationDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#67dd23',
-    alignItems: 'center',
+  },
+  image: {
+    flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   infoContainer: {
-    flex: 1,
-    width: '90%',
-    height: '95%',
+    width: '85%',
+    height: '80%',
     padding: 20,
     marginVertical: 20,
     backgroundColor: '#000',
     borderRadius: 16,
-    position: 'absolute',
+    marginTop: 30,
   },
   information: {
     marginTop: 20,
