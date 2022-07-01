@@ -1,10 +1,19 @@
-import { ImageBackground, StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+} from 'react-native';
 import MainStack from './navigation/MainStack';
+import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-       <MainStack />
+      <AuthProvider>
+        <MainStack />
+      </AuthProvider>
     </SafeAreaView>
   );
 }
@@ -12,5 +21,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  }
+  },
 });

@@ -6,85 +6,63 @@ import {
   View,
   SafeAreaView,
   TouchableHighlight,
-  FlatList,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import axios from 'axios';
-import Episodios from '../components/Episodios';
+import List from '../components/List';
 
 const PersonajeDetail = ({ route, navigation }) => {
-  const [personaje, setValores] = useState([]);
-
-  const locationDetails = () => {
-    console.log(personaje.location.url);
-    navigation.navigate('LocationDetail', { url: personaje.location.url });
-  };
-
   const { url } = route.params;
+  const [episodes, setEpisodes] = useState([]);
+  const [personaje, setPersonaje] = useState([]);
 
   useEffect(() => {
+    let promises = [];
     const getPersonajeInfo = async () => {
       const res = await axios.get(url);
-      setValores(res.data);
+      setPersonaje(res.data);
+      for (const url2 of res.data.episode) {
+        promises.push(
+          axios.get(url2).then((r) => {
+            setEpisodes((episodes) => [...episodes, r.data]);
+          })
+        );
+      }
     };
+    Promise.all(promises).then(() => {
+      console.log('success');
+    });
     getPersonajeInfo();
-  },[]);
+  }, []);
 
-  // useEffect(() => {
-  //   const getPersonajeInfo = async () => {
-  //     const res = await axios.get(url);
-  //     let episodios_info = [];
-  //     for (let i in res.data.episode) {
-  //       const info = await axios.get(res.data.episode[i]);
-  //       episodios_info.push(info.data);
-  //     }
-  //     console.log(episodios_info);
-  //     setValores({
-  //       ...personaje,
-  //       ['personaje']: res.data,
-  //       ['episodes']: episodios_info,
-  //     });
-  //     console.log('ep', personaje.episodes);
-  //     console.log('per', personaje.personaje);
-  //   };
-  //   getPersonajeInfo();
-  // },[]);
-
-
-  const Item = ({ name }) => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{ name }</Text>
-    </View>
-  );
-
-  const renderItem = ({ item }) => <Item title={ item.name } />;
+  const locationDetails = () => {
+    navigation.navigate('LocationDetail', { url: personaje.location.url });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.personajeContainer}>
         <View style={styles.imageContainer}>
           <Text style={styles.name}>{personaje.name}</Text>
-          <Image
-            source={{ uri: personaje.image }}
-            style={styles.img}
-          ></Image>
+          <Image source={{ uri: personaje.image }} style={styles.img}></Image>
           <View style={styles.infoContainer}>
-            <Text style={styles.text}>{personaje.species}</Text>
-            <Text style={styles.text}>{personaje.type}</Text>
+            <Text style={styles.text}>Especie: {personaje.species}</Text>
+            <Text style={styles.text}>
+              Tipo: {personaje.type === '' ? 'unknown' : personaje.type}
+            </Text>
+            <TouchableHighlight onPress={locationDetails}>
+              <View>
+                <Text style={styles.location}>Location: </Text>
+              </View>
+            </TouchableHighlight>
           </View>
-           
-          <TouchableHighlight onPress={locationDetails}>
-            <View>
-              <Text style={styles.location}>Location</Text>
-            </View>
-          </TouchableHighlight>
         </View>
-        <View style={styles.episodesContainer}>
 
-          {/* aca empieza lo complicado  */}
+        <View style={styles.episodesContainer}>
+          <Text style={styles.episodioTitle}>Episodios</Text>
+
           <ScrollView contentContainerStyle={styles.scroll}>
-            <Text style={styles.episodioTitle}>Episodios</Text>
-            <Episodios episodios={personaje.episodes}></Episodios>
+            <List list={episodes}></List>
           </ScrollView>
         </View>
       </View>
@@ -104,24 +82,29 @@ const styles = StyleSheet.create({
   personajeContainer: {
     flex: 1,
     width: '90%',
+    height: '95%',
+    padding: 20,
     marginVertical: 20,
     backgroundColor: '#000',
     borderRadius: 16,
+    position: 'absolute',
   },
   imageContainer: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    height:'40%'
+    height: '20%',
+    marginBottom: 10,
   },
   episodesContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
+    height: '40%',
+    marginTop:10,
   },
   img: {
-    width: '40%',
-    height: '50%',
+    width: '50%',
+    height: '60%',
     borderRadius: 16,
   },
   name: {
@@ -140,35 +123,21 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     textDecorationColor: '#67dd23',
   },
-  item: {
-    backgroundColor: '#fff',
-    width: 300,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    color: '#000',
-    borderRadius:16,
-  },
-  title: {
-    fontSize: 32,
-    color:'#000',
-  },
-  scroll:{
+  scroll: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom:20,
-    height:'90%',
-    overflow:'hidden',
+    marginBottom: 20,
   },
-  episodioTitle:{
-    fontSize:24,
-    color:'#fff',
+  episodioTitle: {
+    fontSize: 24,
+    color: '#fff',
     fontWeight: 'bold',
-    marginVertical:20,
+    marginVertical: 10,
   },
-  infoContainer:{
+  infoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop:50,
-  }
+    marginBottom: 10,
+    marginTop:15,
+  },
 });

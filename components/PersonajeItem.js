@@ -24,9 +24,9 @@ const PersonajeItem = ({ navigation, personaje }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    width: '90%',
+    width: '100%',
     padding: 16,
-    height: 200,
+    height: 150,
     borderRadius: 16,
     marginVertical: 5,
     borderBottomWidth: 1,
@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
   },
   img: {
     width: '50%',
-    height: '100%',
     borderRadius:16
   },
   row: {
@@ -42,6 +41,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent:'center',
     alignItems:'center',
+    textAlign:'center',
   },
   nameText: {
     color: '#fff',

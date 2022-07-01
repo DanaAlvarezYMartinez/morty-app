@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -9,25 +9,32 @@ import {
 } from 'react-native';
 import Btn from '../components/Btn';
 import Input from '../components/TextInput';
+import { AuthContext } from '../context/AuthContext';
 
 const image = {
   uri: 'https://i.pinimg.com/originals/60/1c/71/601c715eee01e1faeda7ecc9ecf1677c.jpg',
 };
 
 const LoginScreen = ({ navigation }) => {
+
+  const {login} = useContext(AuthContext)
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={image} resizeMode='cover' style={styles.image}>
         <View>
-            <Input placeholder='Ingrese su nombre' />
+          
+          <Input placeholder='Ingrese su nombre' />
 
-            <Input placeholder='Ingrese su email' />
+          <Input
+            placeholder='Ingrese su email'
+          />
+
+          {/* <Text style={styles.error}>{test}</Text> */}
 
           <Btn
             text='Iniciar Sesión'
-            onPress={() => {
-              navigation.navigate('PersonajesPage');
-            }}
+            onPress={() => {login()}}
           />
 
           <Btn
@@ -53,4 +60,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  error:{
+    color:'red',
+    fontWeight:'bold',
+  }
 });
