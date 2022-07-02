@@ -55,8 +55,32 @@ export const FavProvider = ({ children }) => {
     }
   };
 
+  const loadFavs = async () => {
+    try {
+      // i get the favs in the storage
+      let js_obj = await AsyncStorage.getItem('favoritos');
+      //   array where i'll put the stuff
+      let favs = [];
+      if (js_obj) {
+        const obj = JSON.parse(js_obj);
+        // i put them in an array
+        for (let i in obj) {
+          favs.push(obj[i]);
+        }
+      }
+      //   this i do it anyways
+      setFavorites(favs);
+    } catch (error) {
+      alert(`loadFavs error  ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    loadFavs();
+  }, []);
+
   return (
-    <FavContext.Provider value={{ addFavorite, deleteFavorite, favorites }}>
+    <FavContext.Provider value={{ addFavorite, deleteFavorite, favorites , loadFavs}}>
       {children}
     </FavContext.Provider>
   );

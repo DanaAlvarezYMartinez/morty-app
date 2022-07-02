@@ -25,7 +25,7 @@ const PersonajeDetail = ({ route, navigation }) => {
   const [isFav, setIsFav] = useState(false);
   const [color, setColor] = useState('#fff');
 
-  
+
   const { addFavorite , deleteFavorite } = useContext(FavContext);
 
 
@@ -45,6 +45,7 @@ const PersonajeDetail = ({ route, navigation }) => {
     Promise.all(promises).then(() => {
       console.log('success');
     });
+    
     getPersonajeInfo();
   }, []);
 
