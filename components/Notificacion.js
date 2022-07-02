@@ -19,11 +19,11 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         padding: 10,
-        paddingVertical: 40,
+        paddingVertical: 20,
         opacity: 0.9,
       },
       title: {
-        fontSize: 24,
+        fontSize: 20,
         color: '#fff',
         textAlign: 'center',
         fontWeight: 'bold',

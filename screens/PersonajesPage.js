@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useRef} from 'react';
 import axios from 'axios';
 import {
   TextInput,
@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import Personajes from '../components/Personajes';
 import Notificacion from '../components/Notificacion';
+import SelectDropdown from 'react-native-select-dropdown'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 const image = {
@@ -24,7 +26,10 @@ const PersonajesPage = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [searchParam, setParam] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [placeholder, setPlaceholder] = useState('Nombre...');
+  const [placeholder, setPlaceholder] = useState('Buscar...');
+  const [filterParam, setFilterParam] = useState('');
+
+  const dropdownRef = useRef({});  
 
   const getPersonajes = async () => {
     if (searchParam === '') {
@@ -43,7 +48,9 @@ const PersonajesPage = ({ navigation }) => {
     setParam('');
     setIsLoading(true);
     setPersonajes([]);
-    setPlaceholder('Nombre...');
+    setPlaceholder('Buscar...');
+    setFilterParam('');
+    dropdownRef.current.reset();
     setPage(1);
   };
 
@@ -55,7 +62,7 @@ const PersonajesPage = ({ navigation }) => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `https://rickandmortyapi.com/api/character/?name=${searchParam}`
+        `https://rickandmortyapi.com/api/character/?${filterParam}=${searchParam}`
       );
       setPersonajes([res.data.results]);
     } catch (error) {
@@ -67,6 +74,14 @@ const PersonajesPage = ({ navigation }) => {
   const renderItem = ({ item }) => {
     return <Personajes navigation={navigation} personajes={item} />;
   };
+
+  const opciones = [
+    { title:'Nombre', value:'name'},
+    { title:'Especie', value:'species'},
+    {title:'Género', value:'gender'},
+    {title:'Tipo', value:'type'},
+    {title:'Status', value:'status'}
+  ]
 
   const handleLoadMore = () => {
     setPage(page + 1);
@@ -86,6 +101,30 @@ const PersonajesPage = ({ navigation }) => {
       <ImageBackground source={image} resizeMode='cover' style={styles.image}>
         <View style={styles.searchContainer}>
           <Text style={styles.title}>Personajes</Text>
+
+          <SelectDropdown 
+            data={opciones}
+            defaultButtonText={ 'Selecione filtro' }
+            dropdownOverlayColor="rgba(0,0,0,0.7)"
+            rowTextForSelection={(item, index) => {
+              return item.title;
+            }}
+            ref={dropdownRef}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem.title;
+            }}
+            onSelect={(selectedItem, index) => {
+              setFilterParam(selectedItem.value)
+            }}
+            buttonStyle={styles.dropdownBtn}
+            buttonTextStyle={styles.dropdownText}
+            dropdownStyle={styles.dropdown}
+            renderDropdownIcon={isOpened => {
+              return <FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} color={'#444'} size={18} />;
+            }}
+            dropdownIconPosition={'right'}
+          />
+
 
           <TextInput
             style={styles.input}
@@ -213,4 +252,20 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     opacity: 0.9,
   },
+  dropdownBtn:{
+    marginTop:20,
+    width:'100%',
+    height:40,
+    backgroundColor: '#FFF',
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: '#444',
+  },
+  dropdownText:{
+    textAlign: 'left',
+    fontSize:14,
+  },
+  dropdown:{
+   borderRadius:8,
+  }
 });
