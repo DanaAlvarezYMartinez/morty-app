@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -18,12 +18,6 @@ const image = {
 const Favoritos = ({ navigation }) => {
   const { favorites } = useContext(FavContext);
 
-  const [personajesFav, setPersonajes] = useState([]);
-
-  useEffect(() => {
-    setPersonajes(favorites);
-  }, []);
-
   const renderItem = ({ item }) => {
     return <PersonajeItem personaje={item} navigation={navigation} />;
   };
@@ -40,7 +34,7 @@ const Favoritos = ({ navigation }) => {
                 <Notificacion text="Oops! Parece que hay favoritos"/>
               ) : (
                 <FlatList
-                  data={personajesFav}
+                  data={favorites}
                   renderItem={renderItem}
                   keyExtractor={(item, index) => index.toString()}
                 />
