@@ -20,12 +20,14 @@ const image = {
 const PersonajesPage = ({ navigation }) => {
   const [personajes, setPersonajes] = useState([]);
   const [page, setPage] = useState(1);
-  const [searchParam, setParam] = useState([]);
+  const [searchParam, setParam] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [placeholder, setPlaceholder] = useState('Nombre...')
 
   const getPersonajes = async () => {
-    setIsLoading(true);
-    if (searchParam.length === 0) {
+    if (searchParam === '') {
+      setIsLoading(true);
+
       const res = await axios.get(
         `https://rickandmortyapi.com/api/character/?page=${page}`
       );
@@ -35,9 +37,17 @@ const PersonajesPage = ({ navigation }) => {
     }
   };
 
+  const clear = async () => {
+    setParam('');
+    setPersonajes([]);
+    setPlaceholder('Nombre...')
+    setPage(1);
+  };
+
   useEffect(() => {
     getPersonajes();
-  }, []);
+
+  }, [page]);
 
   const filter = async () => {
     try {
@@ -52,7 +62,6 @@ const PersonajesPage = ({ navigation }) => {
     }
   };
 
-  const placeholder = 'Nombre...';
 
   const renderItem = ({ item }) => {
     return <Personajes navigation={navigation} personajes={item} />;
@@ -60,13 +69,6 @@ const PersonajesPage = ({ navigation }) => {
 
   const handleLoadMore = () => {
     setPage(page + 1);
-    getPersonajes();
-  };
-
-  const clear = () => {
-    setParam([]);
-    setPersonajes([]);
-    setPage(1);
     getPersonajes();
   };
 
@@ -89,6 +91,7 @@ const PersonajesPage = ({ navigation }) => {
             onChangeText={setParam}
             placeholder={placeholder}
             placeholderTextColor='#fff'
+            editable
           />
           <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.btn} onPress={filter}>
