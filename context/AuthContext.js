@@ -7,7 +7,7 @@ export const AuthProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [userToken, setUserToken ] = useState(null)
     const [userName, setUserName] = useState('');
-    
+
 
     const login = (name) => {
         setIsLoading(true);
@@ -23,7 +23,6 @@ export const AuthProvider = ({children}) => {
         setIsLoading(true);
         setUserToken(null);
         AsyncStorage.removeItem('userToken');
-        AsyncStorage.removeItem('userName');
         setIsLoading(false);
     }
 

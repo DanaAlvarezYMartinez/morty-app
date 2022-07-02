@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Image,
   StyleSheet,
@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import List from '../components/List';
+import Heart from '../components/Heart';
+import { FavContext } from '../context/FavContext';
 
 const image = {
   uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
@@ -20,6 +22,12 @@ const PersonajeDetail = ({ route, navigation }) => {
   const { url } = route.params;
   const [episodes, setEpisodes] = useState([]);
   const [personaje, setPersonaje] = useState([]);
+  const [isFav, setIsFav] = useState(false);
+  const [color, setColor] = useState('#fff');
+
+  
+  const { addFavorite , deleteFavorite } = useContext(FavContext);
+
 
   useEffect(() => {
     let promises = [];
@@ -44,12 +52,27 @@ const PersonajeDetail = ({ route, navigation }) => {
     navigation.navigate('LocationDetail', { url: personaje.location.url });
   };
 
+  const toggleFav = () => {
+    if(isFav){
+      setIsFav(false)
+      setColor('#fff');
+      alert('to false');
+      deleteFavorite(personaje);
+    }else{
+      alert('to true');
+      setIsFav(true);
+      setColor('red');
+      addFavorite(personaje);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={image} resizeMode='cover' style={styles.image}>
         <View style={styles.personajeContainer}>
           <View style={styles.imageContainer}>
-            <Text style={styles.name}>{personaje.name}</Text>
+              <Text style={styles.name}>{personaje.name}</Text>
+              <Heart onPress={toggleFav} color={color} />
             <Image source={{ uri: personaje.image }} style={styles.img}></Image>
             <View style={styles.infoContainer}>
               <Text style={styles.text}>Especie: {personaje.species}</Text>
@@ -94,7 +117,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     backgroundColor: '#000',
     borderRadius: 16,
-    marginTop:20,
+    marginTop: 20,
   },
   imageContainer: {
     flex: 1,

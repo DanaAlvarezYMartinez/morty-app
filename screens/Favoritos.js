@@ -1,81 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useContext } from 'react';
 import {
-  TextInput,
   StyleSheet,
   Text,
   SafeAreaView,
   View,
-  TouchableOpacity,
   FlatList,
-  ActivityIndicator,
   ImageBackground,
 } from 'react-native';
-import Personajes from '../components/Personajes';
+import { FavContext } from '../context/FavContext';
+import PersonajeItem from '../components/PersonajeItem';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const image = {
   uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
 };
 
 const Favoritos = ({ navigation }) => {
-  const [personajes, setPersonajes] = useState([]);
-  const [page, setPage] = useState(1);
-  const [searchParam, setParam] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { favorites } = useContext(FavContext);
 
-  const getPersonajes = async () => {
-    setIsLoading(true);
-    if (searchParam.length === 0) {
-      const res = await axios.get(
-        `https://rickandmortyapi.com/api/character/?page=${page}`
-      );
-      console.log(res.data);
-      setPersonajes((personajes) => [...personajes, res.data.results]);
-      setIsLoading(false);
-    }
-  };
+  const [personajesFav, setPersonajes] = useState([]);
 
   useEffect(() => {
-    getPersonajes();
+    setPersonajes(favorites);
   }, []);
 
-  const filter = async () => {
-    try {
-      setIsLoading(true);
-      const res = await axios.get(
-        `https://rickandmortyapi.com/api/character/?name=${searchParam}`
-      );
-      setPersonajes([res.data.results]);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(`filter error ${error}`);
-    }
-  };
-
-  const placeholder = 'Nombre...';
-
   const renderItem = ({ item }) => {
-    return <Personajes navigation={navigation} personajes={item} />;
+    return <PersonajeItem personaje={item} navigation={navigation} />;
   };
 
-  const handleLoadMore = () => {
-    setPage(page + 1);
-    getPersonajes();
-  };
-
-  const clear = () => {
-    setParam([]);
-    setPersonajes([]);
-    setPage(1);
-    getPersonajes();
-  };
-
-  const renderFooter = () => {
-    return isLoading ? (
-      <View style={styles.loader}>
-        <ActivityIndicator size='large' animating={true} color='#000' />
-      </View>
-    ) : null;
+  const noFavsNotification = () => {
+    if (personajesFav.length !== 0) {
+      return (
+        <View style={styles.noItemsContainer}>
+          <Text style={styles.title}>Oops! Parece que hay favoritos</Text>
+          <Icon name='meh' size={40} color='#fff' style={{ marginTop: 20 }} />
+        </View>
+      );
+    }
   };
 
   return (
@@ -86,15 +47,11 @@ const Favoritos = ({ navigation }) => {
 
           <View style={styles.personajesContainer}>
             <View contentContainerStyle={styles.scroll}>
-              <Text>Holaaaaaa</Text>
-              {/* <FlatList
-                data={personajes}
+              <FlatList
+                data={personajesFav}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
-                onEndReached={handleLoadMore}
-                onEndReachedThreshold={0.5}
-                ListFooterComponent={renderFooter}
-              /> */}
+              />
             </View>
           </View>
         </View>
@@ -114,14 +71,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     padding: 20,
-    marginTop:10,
+    marginTop: 10,
   },
   title: {
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
     fontWeight: 'bold',
-    letterSpacing:5,
+    letterSpacing: 5,
   },
   btnContainer: {
     alignItems: 'center',
@@ -172,5 +129,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  noItemsContainer: {
+    backgroundColor: '#000',
+    borderRadius: 16,
+    alignItems: 'center',
+    padding: 10,
+    paddingVertical: 40,
+    opacity: 0.9,
   },
 });

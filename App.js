@@ -7,12 +7,15 @@ import {
 } from 'react-native';
 import MainStack from './navigation/MainStack';
 import { AuthProvider } from './context/AuthContext';
+import { FavProvider } from './context/FavContext';
 
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <AuthProvider>
-        <MainStack />
+        <FavProvider>
+          <MainStack />
+        </FavProvider>
       </AuthProvider>
     </SafeAreaView>
   );
