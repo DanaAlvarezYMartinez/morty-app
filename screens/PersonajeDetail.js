@@ -26,13 +26,25 @@ const PersonajeDetail = ({ route, navigation }) => {
   const [color, setColor] = useState('#fff');
 
 
-  const { addFavorite , deleteFavorite } = useContext(FavContext);
+  const { addFavorite , deleteFavorite , favorites } = useContext(FavContext);
 
+  
 
   useEffect(() => {
+    // this is to keep consistent the color of the heart emoji
+    const checkFav = async (id) =>{
+      for (const fav of favorites){
+        if(id === fav.id){
+          setIsFav(true);
+          setColor('red');
+        }
+      }
+    };
+    // here i get the important info
     let promises = [];
     const getPersonajeInfo = async () => {
       const res = await axios.get(url);
+      checkFav(res.data.id);
       setPersonaje(res.data);
       for (const url2 of res.data.episode) {
         promises.push(
@@ -45,7 +57,6 @@ const PersonajeDetail = ({ route, navigation }) => {
     Promise.all(promises).then(() => {
       console.log('success');
     });
-    
     getPersonajeInfo();
   }, []);
 
@@ -57,10 +68,8 @@ const PersonajeDetail = ({ route, navigation }) => {
     if(isFav){
       setIsFav(false)
       setColor('#fff');
-      alert('to false');
       deleteFavorite(personaje);
     }else{
-      alert('to true');
       setIsFav(true);
       setColor('red');
       addFavorite(personaje);
