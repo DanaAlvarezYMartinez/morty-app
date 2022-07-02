@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useContext } from 'react';
+import React from 'react';
 import Personajes from '../screens/PersonajesPage';
 import PersonajeDetail from '../screens/PersonajeDetail';
 import LocationDetail from '../screens/LocationDetail';

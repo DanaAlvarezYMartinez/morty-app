@@ -1,8 +1,5 @@
 import {
-  ImageBackground,
   StyleSheet,
-  Text,
-  View,
   SafeAreaView,
 } from 'react-native';
 import MainStack from './navigation/MainStack';
