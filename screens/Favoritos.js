@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { FavContext } from '../context/FavContext';
 import PersonajeItem from '../components/PersonajeItem';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Notificacion from '../components/Notificacion';
 
 const image = {
   uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
@@ -37,17 +37,7 @@ const Favoritos = ({ navigation }) => {
           <View style={styles.personajesContainer}>
             <View contentContainerStyle={styles.scroll}>
               {favorites.length === 0 ? (
-                <View style={styles.noItemsContainer}>
-                  <Text style={styles.title}>
-                    Oops! Parece que hay favoritos
-                  </Text>
-                  <Icon
-                    name='meh'
-                    size={40}
-                    color='#fff'
-                    style={{ marginTop: 20 }}
-                  />
-                </View>
+                <Notificacion text="Oops! Parece que hay favoritos"/>
               ) : (
                 <FlatList
                   data={personajesFav}
@@ -133,12 +123,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  noItemsContainer: {
-    backgroundColor: '#000',
-    borderRadius: 16,
-    alignItems: 'center',
-    padding: 10,
-    paddingVertical: 40,
-    opacity: 0.9,
-  },
+  
 });

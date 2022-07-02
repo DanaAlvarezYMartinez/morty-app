@@ -80,7 +80,7 @@ export const FavProvider = ({ children }) => {
   }, []);
 
   return (
-    <FavContext.Provider value={{ addFavorite, deleteFavorite, favorites }}>
+    <FavContext.Provider value={{ addFavorite, deleteFavorite, favorites}}>
       {children}
     </FavContext.Provider>
   );

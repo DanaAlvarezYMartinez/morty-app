@@ -12,7 +12,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import Personajes from '../components/Personajes';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Notificacion from '../components/Notificacion';
 
 
 const image = {
@@ -113,20 +113,8 @@ const PersonajesPage = ({ navigation }) => {
 
           <View style={styles.personajesContainer}>
             <View contentContainerStyle={styles.scroll}>
-
-
             { (personajes.length === 0 && !isLoading ) ? (
-                <View style={styles.noItemsContainer}>
-                  <Text style={styles.title}>
-                    Oops! Parece que hay personajes
-                  </Text>
-                  <Icon
-                    name='meh'
-                    size={40}
-                    color='#fff'
-                    style={{ marginTop: 20 }}
-                  />
-                </View>
+                <Notificacion text='Oops! Parece que hay personajes'/>
               ) : (
                 <FlatList
                 data={personajes}
