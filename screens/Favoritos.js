@@ -28,17 +28,6 @@ const Favoritos = ({ navigation }) => {
     return <PersonajeItem personaje={item} navigation={navigation} />;
   };
 
-  const noFavsNotification = () => {
-    if (personajesFav.length !== 0) {
-      return (
-        <View style={styles.noItemsContainer}>
-          <Text style={styles.title}>Oops! Parece que hay favoritos</Text>
-          <Icon name='meh' size={40} color='#fff' style={{ marginTop: 20 }} />
-        </View>
-      );
-    }
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={image} resizeMode='cover' style={styles.image}>
@@ -47,11 +36,25 @@ const Favoritos = ({ navigation }) => {
 
           <View style={styles.personajesContainer}>
             <View contentContainerStyle={styles.scroll}>
-              <FlatList
-                data={personajesFav}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()}
-              />
+              {favorites.length === 0 ? (
+                <View style={styles.noItemsContainer}>
+                  <Text style={styles.title}>
+                    Oops! Parece que hay favoritos
+                  </Text>
+                  <Icon
+                    name='meh'
+                    size={40}
+                    color='#fff'
+                    style={{ marginTop: 20 }}
+                  />
+                </View>
+              ) : (
+                <FlatList
+                  data={personajesFav}
+                  renderItem={renderItem}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              )}
             </View>
           </View>
         </View>

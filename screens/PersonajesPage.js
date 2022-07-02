@@ -12,6 +12,8 @@ import {
   ImageBackground,
 } from 'react-native';
 import Personajes from '../components/Personajes';
+import Icon from 'react-native-vector-icons/AntDesign';
+
 
 const image = {
   uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
@@ -22,7 +24,7 @@ const PersonajesPage = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [searchParam, setParam] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [placeholder, setPlaceholder] = useState('Nombre...')
+  const [placeholder, setPlaceholder] = useState('Nombre...');
 
   const getPersonajes = async () => {
     if (searchParam === '') {
@@ -39,14 +41,14 @@ const PersonajesPage = ({ navigation }) => {
 
   const clear = async () => {
     setParam('');
+    setIsLoading(true);
     setPersonajes([]);
-    setPlaceholder('Nombre...')
+    setPlaceholder('Nombre...');
     setPage(1);
   };
 
   useEffect(() => {
     getPersonajes();
-
   }, [page]);
 
   const filter = async () => {
@@ -56,12 +58,11 @@ const PersonajesPage = ({ navigation }) => {
         `https://rickandmortyapi.com/api/character/?name=${searchParam}`
       );
       setPersonajes([res.data.results]);
-      setIsLoading(false);
     } catch (error) {
-      console.log(`filter error ${error}`);
+      setPersonajes([]);
     }
+    setIsLoading(false);
   };
-
 
   const renderItem = ({ item }) => {
     return <Personajes navigation={navigation} personajes={item} />;
@@ -95,16 +96,39 @@ const PersonajesPage = ({ navigation }) => {
           />
           <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.btn} onPress={filter}>
-              <Text style={{ fontSize: 11, letterSpacing:5, fontWeight:'bold' }}>BUSCAR</Text>
+              <Text
+                style={{ fontSize: 11, letterSpacing: 5, fontWeight: 'bold' }}
+              >
+                BUSCAR
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.btn} onPress={clear}>
-              <Text style={{ fontSize: 11, letterSpacing:5 , fontWeight:'bold'}}>CLEAR</Text>
+              <Text
+                style={{ fontSize: 11, letterSpacing: 5, fontWeight: 'bold' }}
+              >
+                CLEAR
+              </Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.personajesContainer}>
             <View contentContainerStyle={styles.scroll}>
-              <FlatList
+
+
+            { (personajes.length === 0 && !isLoading ) ? (
+                <View style={styles.noItemsContainer}>
+                  <Text style={styles.title}>
+                    Oops! Parece que hay personajes
+                  </Text>
+                  <Icon
+                    name='meh'
+                    size={40}
+                    color='#fff'
+                    style={{ marginTop: 20 }}
+                  />
+                </View>
+              ) : (
+                <FlatList
                 data={personajes}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
@@ -112,6 +136,9 @@ const PersonajesPage = ({ navigation }) => {
                 onEndReachedThreshold={0.5}
                 ListFooterComponent={renderFooter}
               />
+              )}
+
+              
             </View>
           </View>
         </View>
@@ -131,14 +158,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     padding: 20,
-    marginTop:10,
+    marginTop: 10,
   },
   title: {
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
     fontWeight: 'bold',
-    letterSpacing:5,
+    letterSpacing: 5,
   },
   btnContainer: {
     alignItems: 'center',
@@ -189,5 +216,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  noItemsContainer: {
+    backgroundColor: '#000',
+    borderRadius: 16,
+    alignItems: 'center',
+    padding: 10,
+    paddingVertical: 40,
+    opacity: 0.9,
   },
 });
