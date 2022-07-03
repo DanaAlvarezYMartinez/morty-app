@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     padding: 20,
-    marginTop: 10,
+    marginTop: 30,
   },
   title: {
     fontSize: 24,
