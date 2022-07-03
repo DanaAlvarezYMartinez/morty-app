@@ -6,6 +6,7 @@ import {
   View,
   SafeAreaView,
   ImageBackground,
+  ActivityIndicator,
 } from 'react-native';
 import axios from 'axios';
 import List from '../components/List';
@@ -19,24 +20,27 @@ const LocationDetail = ({ route }) => {
 
   const [location, setLocation] = useState([]);
   const [residents, setResidents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  const getLocationInfo = async () => {
     let promises = [];
-    const getLocationInfo = async () => {
-      const res = await axios.get(url);
-      setLocation(res.data);
-      for (const url2 of res.data.residents) {
-        promises.push(
-          axios.get(url2).then((r) => {
-            setResidents((residents) => [...residents, r.data]);
-          })
-        );
-      }
-    };
+    setIsLoading(true);
+    const res = await axios.get(url);
+    setLocation(res.data);
+    for (const url2 of res.data.residents) {
+      promises.push(
+        axios.get(url2).then((r) => {
+          setResidents((residents) => [...residents, r.data]);
+        })
+      );
+    }
     Promise.all(promises).then(() => {
       console.log('success');
     });
+    setIsLoading(false);
+  };
 
+  useEffect(() => {
     getLocationInfo();
   }, []);
 
@@ -44,18 +48,22 @@ const LocationDetail = ({ route }) => {
     <SafeAreaView style={styles.container}>
       <ImageBackground source={image} resizeMode='cover' style={styles.image}>
         <View style={styles.infoContainer}>
-          <View style={styles.information}>
-            <Text style={styles.name}>{location.name}</Text>
-            <Text style={styles.text}>Tipo: {location.type}</Text>
-            <Text style={styles.text}>Dimensión: {location.dimension}</Text>
-            <View style={styles.residentsContainer}>
-              <Text style={styles.residentsTitle}>Residentes</Text>
+          {isLoading ? (
+            <ActivityIndicator size='large' animating={true} color='#fff' />
+          ) : (
+            <View style={styles.information}>
+              <Text style={styles.name}>{location.name}</Text>
+              <Text style={styles.text}>Tipo: {location.type}</Text>
+              <Text style={styles.text}>Dimensión: {location.dimension}</Text>
+              <View style={styles.residentsContainer}>
+                <Text style={styles.residentsTitle}>Residentes</Text>
 
-              <ScrollView contentContainerStyle={styles.scroll}>
-                <List list={residents}></List>
-              </ScrollView>
+                <ScrollView contentContainerStyle={styles.scroll}>
+                  <List list={residents}></List>
+                </ScrollView>
+              </View>
             </View>
-          </View>
+          )}
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -99,7 +107,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     marginVertical: 5,
-    textAlign:'center',
+    textAlign: 'center',
   },
   residentsTitle: {
     fontSize: 24,
