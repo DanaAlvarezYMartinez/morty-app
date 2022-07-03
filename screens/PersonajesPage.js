@@ -151,7 +151,7 @@ const PersonajesPage = ({ navigation }) => {
           <View style={styles.personajesContainer}>
             <View contentContainerStyle={styles.scroll}>
               {personajes.length === 0 && !isLoading ? (
-                <Notificacion text='Oops! Parece que hay personajes' />
+                <Notificacion text='Oops! Parece que no hay personajes' />
               ) : (
                 <FlatList
                   data={personajes}

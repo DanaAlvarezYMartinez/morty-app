@@ -32,7 +32,7 @@ const Favoritos = ({ navigation }) => {
           <View style={styles.personajesContainer}>
             <View contentContainerStyle={styles.scroll}>
               {favorites.length === 0 ? (
-                <Notificacion text="Oops! Parece que hay favoritos"/>
+                <Notificacion text="Oops! Parece que no hay favoritos"/>
               ) : (
                 <FlatList
                   data={favorites}
