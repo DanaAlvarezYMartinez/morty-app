@@ -108,10 +108,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: '100%',
   },
-  loader: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
   image: {
     flex: 1,
     justifyContent: 'center',

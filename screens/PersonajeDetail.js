@@ -14,6 +14,7 @@ import axios from 'axios';
 import Heart from '../components/Heart';
 import { FavContext } from '../context/FavContext';
 import ListItem from '../components/ListItem';
+import Loader from '../components/Loader';
 
 const image = {
   uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
@@ -100,11 +101,7 @@ const PersonajeDetail = ({ route, navigation }) => {
   };
 
   const renderFooter = () => {
-    return isLoading ? (
-      <View style={styles.loader}>
-        <ActivityIndicator size='large' animating={true} color='#fff' />
-      </View>
-    ) : null;
+    return isLoading ? <Loader color='#fff' /> : null;
   };
 
   const renderItem = ({ item }) => {
@@ -115,7 +112,7 @@ const PersonajeDetail = ({ route, navigation }) => {
     <SafeAreaView style={styles.container}>
       <ImageBackground source={image} resizeMode='cover' style={styles.image}>
         {isLoading ? (
-          <ActivityIndicator size='large' animating={true} color='#000' />
+          <Loader color='#000' />
         ) : (
           <View style={styles.personajeContainer}>
             <View style={styles.imageContainer}>

@@ -5,11 +5,11 @@ import {
   View,
   SafeAreaView,
   ImageBackground,
-  ActivityIndicator,
   FlatList,
 } from 'react-native';
 import axios from 'axios';
 import ListItem from '../components/ListItem';
+import Loader from '../components/Loader';
 
 const image = {
   uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
@@ -45,11 +45,7 @@ const LocationDetail = ({ route }) => {
   };
 
   const renderFooter = () => {
-    return isLoading ? (
-      <View style={styles.loader}>
-        <ActivityIndicator size='large' animating={true} color='#fff' />
-      </View>
-    ) : null;
+    return isLoading ? <Loader color='#fff' /> : null;
   };
 
   const renderItem = ({ item }) => {
@@ -72,14 +68,12 @@ const LocationDetail = ({ route }) => {
     getLocationInfo();
   }, []);
 
-
-
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={image} resizeMode='cover' style={styles.image}>
         <View style={styles.infoContainer}>
           {isLoading ? (
-            <ActivityIndicator size='large' animating={true} color='#fff' />
+            <Loader color='#fff' />
           ) : (
             <View style={styles.information}>
               <Text style={styles.name}>{location.name}</Text>
@@ -89,17 +83,15 @@ const LocationDetail = ({ route }) => {
                 <Text style={styles.residentsTitle}>Residentes</Text>
 
                 <View style={styles.scroll}>
-                <FlatList
-                  data={residents}
-                  renderItem={renderItem}
-                  keyExtractor={(item, index) => index.toString()}
-                  onEndReached={handleLoadMore}
-                  onEndReachedThreshold={0.5}
-                  ListFooterComponent={renderFooter}
-                />
-
+                  <FlatList
+                    data={residents}
+                    renderItem={renderItem}
+                    keyExtractor={(item, index) => index.toString()}
+                    onEndReached={handleLoadMore}
+                    onEndReachedThreshold={0.5}
+                    ListFooterComponent={renderFooter}
+                  />
                 </View>
-
               </View>
             </View>
           )}
@@ -158,7 +150,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-    maxHeight:'75%'
+    maxHeight: '75%',
   },
   residentsContainer: {
     flex: 1,

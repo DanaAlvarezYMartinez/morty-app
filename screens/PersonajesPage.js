@@ -8,14 +8,13 @@ import {
   View,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator,
   ImageBackground,
 } from 'react-native';
 import Personajes from '../components/Personajes';
 import Notificacion from '../components/Notificacion';
 import SelectDropdown from 'react-native-select-dropdown'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+import Loader from '../components/Loader';
 
 const image = {
   uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
@@ -87,11 +86,8 @@ const PersonajesPage = ({ navigation }) => {
   };
 
   const renderFooter = () => {
-    return isLoading ? (
-      <View style={styles.loader}>
-        <ActivityIndicator size='large' animating={true} color='#000' />
-      </View>
-    ) : null;
+    return isLoading ? <Loader color='#000' /> : null;
+
   };
 
   return (
@@ -232,10 +228,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     width: '100%',
-  },
-  loader: {
-    marginTop: 20,
-    alignItems: 'center',
   },
   image: {
     flex: 1,
