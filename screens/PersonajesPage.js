@@ -38,7 +38,6 @@ const PersonajesPage = ({ navigation }) => {
       const res = await axios.get(
         `https://rickandmortyapi.com/api/character/?page=${page}`
       );
-      console.log(res.data);
       setPersonajes((personajes) => [...personajes, res.data.results]);
       setIsLoading(false);
     }
@@ -85,7 +84,6 @@ const PersonajesPage = ({ navigation }) => {
 
   const handleLoadMore = () => {
     setPage(page + 1);
-    getPersonajes();
   };
 
   const renderFooter = () => {
@@ -207,8 +205,8 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     height: 35,
-    borderColor: '#3cb1c8',
-    borderWidth: 3,
+    borderColor: '#000',
+    borderWidth: 2,
     fontSize: 11,
     marginHorizontal: 5,
     flex: 1,

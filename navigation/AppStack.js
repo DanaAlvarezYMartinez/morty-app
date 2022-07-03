@@ -12,7 +12,7 @@ const AppStack = () => {
   return (
     <Stack.Navigator
     screenOptions={{
-      headerShown: false
+      headerShown: false,
     }}>
 
       <Stack.Screen name='Profile' component={Profile} />

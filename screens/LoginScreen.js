@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -15,18 +15,19 @@ const image = {
 };
 
 const LoginScreen = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('')
-
   const { login } = useContext(AuthContext);
+
+  const [inputName, setInputName] = useState('');
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+
 
   const validateEmail = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (reg.test(email) === false) {
       setError('¡Email no valido!');
-    }else{
-      login(userName);
+    } else {
+      login(inputName);
     }
   };
 
@@ -36,7 +37,7 @@ const LoginScreen = () => {
         <View style={styles.formContainer}>
           <TextInput
             style={styles.input}
-            onChangeText={setUserName}
+            onChangeText={setInputName}
             placeholder='Ingrese su nombre'
             placeholderTextColor='#000'
           />
@@ -50,10 +51,7 @@ const LoginScreen = () => {
 
           <Text style={styles.error}>{error}</Text>
 
-          <Btn
-            text='Iniciar Sesión'
-            onPress={validateEmail}
-          />
+          <Btn text='Iniciar Sesión' onPress={validateEmail} />
         </View>
       </ImageBackground>
     </SafeAreaView>

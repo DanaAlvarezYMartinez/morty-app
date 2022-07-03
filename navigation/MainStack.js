@@ -10,7 +10,7 @@ import AuthStack from './AuthStack';
 
 const MainStack = () => {
   
-  const { isLoading, userToken } = useContext(AuthContext);
+  const { isLoading, userToken, userName } = useContext(AuthContext);
 
   if (isLoading) {
     return (
@@ -24,7 +24,7 @@ const MainStack = () => {
 
   return (
     <NavigationContainer>
-      {userToken !== null ? <AppStack /> : <AuthStack />}
+      {(userToken !== null) ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };

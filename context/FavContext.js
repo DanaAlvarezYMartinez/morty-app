@@ -51,7 +51,7 @@ export const FavProvider = ({ children }) => {
       setFavorites(favs);
       AsyncStorage.setItem('favoritos', JSON.stringify(favs));
     } catch (error) {
-      alert(`deleteFav error  ${error}`);
+      console.log(`deleteFav error  ${error}`);
     }
   };
 
@@ -71,7 +71,7 @@ export const FavProvider = ({ children }) => {
       //   this i do it anyways
       setFavorites(favs);
     } catch (error) {
-      alert(`loadFavs error  ${error}`);
+      console.log(`loadFavs error  ${error}`);
     }
   };
 

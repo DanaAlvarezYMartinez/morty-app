@@ -46,8 +46,8 @@ const LocationDetail = ({ route }) => {
         <View style={styles.infoContainer}>
           <View style={styles.information}>
             <Text style={styles.name}>{location.name}</Text>
-            <Text style={styles.text}>Type: {location.type}</Text>
-            <Text style={styles.text}>Dimension: {location.dimension}</Text>
+            <Text style={styles.text}>Tipo: {location.type}</Text>
+            <Text style={styles.text}>Dimensión: {location.dimension}</Text>
             <View style={styles.residentsContainer}>
               <Text style={styles.residentsTitle}>Residentes</Text>
 
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     marginVertical: 5,
+    textAlign:'center',
   },
   residentsTitle: {
     fontSize: 24,

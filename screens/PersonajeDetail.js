@@ -6,13 +6,14 @@ import {
   View,
   SafeAreaView,
   TouchableHighlight,
-  ScrollView,
+  ActivityIndicator,
   ImageBackground,
+  FlatList,
 } from 'react-native';
 import axios from 'axios';
-import List from '../components/List';
 import Heart from '../components/Heart';
 import { FavContext } from '../context/FavContext';
+import ListItem from '../components/ListItem';
 
 const image = {
   uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
@@ -20,91 +21,139 @@ const image = {
 
 const PersonajeDetail = ({ route, navigation }) => {
   const { url } = route.params;
+
   const [episodes, setEpisodes] = useState([]);
   const [personaje, setPersonaje] = useState([]);
   const [isFav, setIsFav] = useState(false);
   const [color, setColor] = useState('#fff');
+  const [isLoading, setIsLoading] = useState(false);
+  const [location, setLocation] = useState('');
+  const [page, setPage] = useState(0);
+  const [urls, setUrls] = useState([]);
 
+  const { addFavorite, deleteFavorite, favorites } = useContext(FavContext);
 
-  const { addFavorite , deleteFavorite , favorites } = useContext(FavContext);
+  const limit = 10;
 
-  
-
-  useEffect(() => {
-    // this is to keep consistent the color of the heart emoji
-    const checkFav = async (id) =>{
-      for (const fav of favorites){
-        if(id === fav.id){
-          setIsFav(true);
-          setColor('red');
-        }
+  const checkFav = (id) => {
+    for (const fav of favorites) {
+      if (id === fav.id) {
+        setIsFav(true);
+        setColor('red');
       }
-    };
+    }
+  };
+
+  const getEpisodes = async () => {
     // here i get the important info
     let promises = [];
-    const getPersonajeInfo = async () => {
-      const res = await axios.get(url);
-      checkFav(res.data.id);
-      setPersonaje(res.data);
-      for (const url2 of res.data.episode) {
-        promises.push(
-          axios.get(url2).then((r) => {
-            setEpisodes((episodes) => [...episodes, r.data]);
-          })
-        );
-      }
-    };
+    for (const url2 of urls.slice(page * limit, (page + 1) * limit)) {
+      promises.push(
+        axios.get(url2).then((r) => {
+          setEpisodes((episodes) => [...episodes, r.data]);
+        })
+      );
+    }
     Promise.all(promises).then(() => {
       console.log('success');
     });
+  };
+
+  useEffect(() => {
+    getEpisodes();
+  }, [page, urls]);
+
+  useEffect(() => {
     getPersonajeInfo();
   }, []);
+
+
+  const getPersonajeInfo = async () => {
+    setIsLoading(true);
+    const res = await axios.get(url);
+    checkFav(res.data.id);
+    setPersonaje(res.data);
+    setLocation(res.data.location.name);
+    setUrls(res.data.episode);
+    setIsLoading(false);
+  };
+
 
   const locationDetails = () => {
     navigation.navigate('LocationDetail', { url: personaje.location.url });
   };
 
   const toggleFav = () => {
-    if(isFav){
-      setIsFav(false)
+    if (isFav) {
+      setIsFav(false);
       setColor('#fff');
       deleteFavorite(personaje);
-    }else{
+    } else {
       setIsFav(true);
       setColor('red');
       addFavorite(personaje);
     }
-  }
+  };
+
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
+
+  const renderFooter = () => {
+    return isLoading ? (
+      <View style={styles.loader}>
+        <ActivityIndicator size='large' animating={true} color='#fff' />
+      </View>
+    ) : null;
+  };
+
+  const renderItem = ({ item }) => {
+    return <ListItem item={item} />;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={image} resizeMode='cover' style={styles.image}>
-        <View style={styles.personajeContainer}>
-          <View style={styles.imageContainer}>
+        {isLoading ? (
+          <ActivityIndicator size='large' animating={true} color='#000' />
+        ) : (
+          <View style={styles.personajeContainer}>
+            <View style={styles.imageContainer}>
               <Text style={styles.name}>{personaje.name}</Text>
               <Heart onPress={toggleFav} color={color} />
-            <Image source={{ uri: personaje.image }} style={styles.img}></Image>
-            <View style={styles.infoContainer}>
-              <Text style={styles.text}>Especie: {personaje.species}</Text>
-              <Text style={styles.text}>
-                Tipo: {personaje.type === '' ? 'unknown' : personaje.type}
-              </Text>
-              <TouchableHighlight onPress={locationDetails}>
-                <View>
-                  <Text style={styles.location}>Location: </Text>
-                </View>
-              </TouchableHighlight>
+              <Image
+                source={{ uri: personaje.image }}
+                style={styles.img}
+              ></Image>
+              <View style={styles.infoContainer}>
+                <Text style={styles.text}>Especie: {personaje.species}</Text>
+                <Text style={styles.text}>
+                  Tipo: {personaje.type === '' ? 'unknown' : personaje.type}
+                </Text>
+                <TouchableHighlight onPress={locationDetails}>
+                  <View>
+                    <Text style={styles.location}>{location} </Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
+            </View>
+
+            <View style={styles.episodesContainer}>
+              <Text style={styles.episodioTitle}>Episodios</Text>
+
+              <View style={styles.scroll}>
+                <FlatList
+                  data={episodes}
+                  renderItem={renderItem}
+                  keyExtractor={(item, index) => index.toString()}
+                  onEndReached={handleLoadMore}
+                  onEndReachedThreshold={0.5}
+                  ListFooterComponent={renderFooter}
+                />
+              </View>
             </View>
           </View>
-
-          <View style={styles.episodesContainer}>
-            <Text style={styles.episodioTitle}>Episodios</Text>
-
-            <ScrollView contentContainerStyle={styles.scroll}>
-              <List list={episodes}></List>
-            </ScrollView>
-          </View>
-        </View>
+        )}
       </ImageBackground>
     </SafeAreaView>
   );
@@ -140,7 +189,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     height: '40%',
-    marginTop: 10,
+    marginTop: 30,
   },
   img: {
     width: '50%',
@@ -156,6 +205,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontSize: 16,
+    textAlign: 'center',
   },
   location: {
     color: '#67dd23',
@@ -167,6 +217,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    maxHeight:'75%'
   },
   episodioTitle: {
     fontSize: 24,

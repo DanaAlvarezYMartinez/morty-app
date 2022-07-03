@@ -14,13 +14,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: 250,
     padding: 10,
-    marginVertical: 8,
+    marginVertical: 4,
     marginHorizontal: 16,
     color: '#000',
     borderRadius: 16,
   },
   title: {
-    fontSize: 15,
+    fontSize: 13,
     color: '#000',
   },
 });

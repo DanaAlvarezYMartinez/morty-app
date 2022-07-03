@@ -19,7 +19,7 @@ const Favoritos = ({ navigation }) => {
   const { favorites } = useContext(FavContext);
 
   const renderItem = ({ item }) => {
-    return <PersonajeItem personaje={item} navigation={navigation} />;
+    return item.length !== 0 ? (<PersonajeItem personaje={item} navigation={navigation} />) : null;
   };
 
   return (
