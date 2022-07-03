@@ -8,23 +8,18 @@ export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   const [userName, setUserName] = useState(' ');
 
-
-  const login = (name) => {
-    console.log('call login');
+  const login = async (name) => {
     setIsLoading(true);
     setUserToken('logged');
-    if(name){
-      console.log('login nombre', name);
-        setUserName(name);
-        AsyncStorage.setItem('userName',userName);
+    if (name) {
+      setUserName(name);
+      AsyncStorage.setItem('userName', name);
     }
     AsyncStorage.setItem('userToken', 'logged');
     setIsLoading(false);
   };
 
   const logout = () => {
-    console.log('logout');
-    console.log('name en logOut ', userName);
     setIsLoading(true);
     setUserToken(null);
     AsyncStorage.removeItem('userToken');
@@ -33,11 +28,9 @@ export const AuthProvider = ({ children }) => {
 
   const isLoggedIn = async () => {
     try {
-      console.log('is Loggedin');
       setIsLoading(true);
       const userToken = await AsyncStorage.getItem('userToken');
       let name = await AsyncStorage.getItem('userName');
-      console.log('islogged in name', name);
       setUserName(name);
       setUserToken(userToken);
       setIsLoading(false);

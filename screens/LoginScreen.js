@@ -15,18 +15,23 @@ const image = {
 };
 
 const LoginScreen = () => {
-  const { login } = useContext(AuthContext);
+  const { login , userName} = useContext(AuthContext);
 
   const [inputName, setInputName] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
 
+  useEffect(() => {
+    setInputName(userName);
+  }, []);
+
   const validateEmail = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (reg.test(email) === false) {
       setError('¡Email no valido!');
     } else {
+      console.log('input name en validate', inputName)
       login(inputName);
     }
   };
