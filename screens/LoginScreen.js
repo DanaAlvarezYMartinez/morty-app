@@ -31,7 +31,6 @@ const LoginScreen = () => {
     if (reg.test(email) === false) {
       setError('¡Email no valido!');
     } else {
-      console.log('input name en validate', inputName)
       login(inputName);
     }
   };
