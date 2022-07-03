@@ -16,6 +16,7 @@ const image = {
 };
 
 const Favoritos = ({ navigation }) => {
+
   const { favorites } = useContext(FavContext);
 
   const renderItem = ({ item }) => {

@@ -10,12 +10,11 @@ export const FavProvider = ({ children }) => {
     try {
       // i get the favs in the storage
       let js_obj = await AsyncStorage.getItem('favoritos');
-      //   array where i'll put the stuff
       let favs = [];
+      // i add the new character
       favs.push(personaje);
       if (js_obj) {
         const obj = JSON.parse(js_obj);
-        // i put them in an array
         for (let i in obj) {
           // so i don't have two times the same item, i ask it already exists before adding it
           if (obj[i].id !== personaje.id) {
@@ -23,7 +22,6 @@ export const FavProvider = ({ children }) => {
           }
         }
       }
-      //   this i do it anyways
       setFavorites(favs);
       AsyncStorage.setItem('favoritos', JSON.stringify(favs));
     } catch (error) {
@@ -35,19 +33,16 @@ export const FavProvider = ({ children }) => {
     try {
       // i get the favs in the storage
       let js_obj = await AsyncStorage.getItem('favoritos');
-      //   array where i'll put the stuff
       let favs = [];
       if (js_obj) {
         const obj = JSON.parse(js_obj);
-        // i put them in an array
         for (let i in obj) {
-          // if the id is different i add it, otherway i don't
+          // if the id is different i add it, else i don't
           if (obj[i].id !== personaje.id) {
             favs.push(obj[i]);
           }
         }
       }
-      //   this i do it anyways
       setFavorites(favs);
       AsyncStorage.setItem('favoritos', JSON.stringify(favs));
     } catch (error) {
@@ -57,18 +52,14 @@ export const FavProvider = ({ children }) => {
 
   const loadFavs = async () => {
     try {
-      // i get the favs in the storage
       let js_obj = await AsyncStorage.getItem('favoritos');
-      //   array where i'll put the stuff
       let favs = [];
       if (js_obj) {
         const obj = JSON.parse(js_obj);
-        // i put them in an array
         for (let i in obj) {
           favs.push(obj[i]);
         }
       }
-      //   this i do it anyways
       setFavorites(favs);
     } catch (error) {
       console.log(`loadFavs error  ${error}`);
@@ -80,7 +71,7 @@ export const FavProvider = ({ children }) => {
   }, []);
 
   return (
-    <FavContext.Provider value={{ addFavorite, deleteFavorite, favorites}}>
+    <FavContext.Provider value={{ addFavorite, deleteFavorite, favorites }}>
       {children}
     </FavContext.Provider>
   );

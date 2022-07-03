@@ -16,6 +16,7 @@ const image = {
 };
 
 const LocationDetail = ({ route }) => {
+  
   const { url } = route.params;
 
   const [location, setLocation] = useState([]);

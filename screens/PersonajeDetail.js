@@ -46,7 +46,6 @@ const PersonajeDetail = ({ route, navigation }) => {
   };
 
   const getEpisodes = async () => {
-    // here i get the important info
     let promises = [];
     for (const url2 of urls.slice(page * limit, (page + 1) * limit)) {
       promises.push(
@@ -60,15 +59,6 @@ const PersonajeDetail = ({ route, navigation }) => {
     });
   };
 
-  useEffect(() => {
-    getEpisodes();
-  }, [page, urls]);
-
-  useEffect(() => {
-    getPersonajeInfo();
-  }, []);
-
-
   const getPersonajeInfo = async () => {
     setIsLoading(true);
     const res = await axios.get(url);
@@ -78,7 +68,6 @@ const PersonajeDetail = ({ route, navigation }) => {
     setUrls(res.data.episode);
     setIsLoading(false);
   };
-
 
   const locationDetails = () => {
     navigation.navigate('LocationDetail', { url: personaje.location.url });
@@ -107,6 +96,14 @@ const PersonajeDetail = ({ route, navigation }) => {
   const renderItem = ({ item }) => {
     return <ListItem item={item} />;
   };
+
+  useEffect(() => {
+    getEpisodes();
+  }, [page, urls]);
+
+  useEffect(() => {
+    getPersonajeInfo();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -214,7 +211,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-    maxHeight:'75%'
+    maxHeight: '75%',
   },
   episodioTitle: {
     fontSize: 24,

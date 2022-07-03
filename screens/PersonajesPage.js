@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {
   TextInput,
@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Personajes from '../components/Personajes';
 import Notificacion from '../components/Notificacion';
-import SelectDropdown from 'react-native-select-dropdown'
+import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Loader from '../components/Loader';
 
@@ -28,7 +28,7 @@ const PersonajesPage = ({ navigation }) => {
   const [placeholder, setPlaceholder] = useState('Buscar...');
   const [filterParam, setFilterParam] = useState('');
 
-  const dropdownRef = useRef({});  
+  const dropdownRef = useRef({});
 
   const getPersonajes = async () => {
     if (searchParam === '') {
@@ -52,10 +52,6 @@ const PersonajesPage = ({ navigation }) => {
     setPage(1);
   };
 
-  useEffect(() => {
-    getPersonajes();
-  }, [page]);
-
   const filter = async () => {
     try {
       setIsLoading(true);
@@ -74,12 +70,12 @@ const PersonajesPage = ({ navigation }) => {
   };
 
   const opciones = [
-    { title:'Nombre', value:'name'},
-    { title:'Especie', value:'species'},
-    {title:'Género', value:'gender'},
-    {title:'Tipo', value:'type'},
-    {title:'Status', value:'status'}
-  ]
+    { title: 'Nombre', value: 'name' },
+    { title: 'Especie', value: 'species' },
+    { title: 'Género', value: 'gender' },
+    { title: 'Tipo', value: 'type' },
+    { title: 'Status', value: 'status' },
+  ];
 
   const handleLoadMore = () => {
     setPage(page + 1);
@@ -87,8 +83,11 @@ const PersonajesPage = ({ navigation }) => {
 
   const renderFooter = () => {
     return isLoading ? <Loader color='#000' /> : null;
-
   };
+
+  useEffect(() => {
+    getPersonajes();
+  }, [page]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -96,10 +95,10 @@ const PersonajesPage = ({ navigation }) => {
         <View style={styles.searchContainer}>
           <Text style={styles.title}>Personajes</Text>
 
-          <SelectDropdown 
+          <SelectDropdown
             data={opciones}
-            defaultButtonText={ 'Selecione filtro' }
-            dropdownOverlayColor="rgba(0,0,0,0.7)"
+            defaultButtonText={'Selecione filtro'}
+            dropdownOverlayColor='rgba(0,0,0,0.7)'
             rowTextForSelection={(item, index) => {
               return item.title;
             }}
@@ -108,17 +107,22 @@ const PersonajesPage = ({ navigation }) => {
               return selectedItem.title;
             }}
             onSelect={(selectedItem, index) => {
-              setFilterParam(selectedItem.value)
+              setFilterParam(selectedItem.value);
             }}
             buttonStyle={styles.dropdownBtn}
             buttonTextStyle={styles.dropdownText}
             dropdownStyle={styles.dropdown}
-            renderDropdownIcon={isOpened => {
-              return <FontAwesome name={isOpened ? 'angle-up' : 'angle-down'} color={'#444'} size={18} />;
+            renderDropdownIcon={(isOpened) => {
+              return (
+                <FontAwesome
+                  name={isOpened ? 'angle-up' : 'angle-down'}
+                  color={'#444'}
+                  size={18}
+                />
+              );
             }}
             dropdownIconPosition={'right'}
           />
-
 
           <TextInput
             style={styles.input}
@@ -146,20 +150,18 @@ const PersonajesPage = ({ navigation }) => {
 
           <View style={styles.personajesContainer}>
             <View contentContainerStyle={styles.scroll}>
-            { (personajes.length === 0 && !isLoading ) ? (
-                <Notificacion text='Oops! Parece que hay personajes'/>
+              {personajes.length === 0 && !isLoading ? (
+                <Notificacion text='Oops! Parece que hay personajes' />
               ) : (
                 <FlatList
-                data={personajes}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()}
-                onEndReached={handleLoadMore}
-                onEndReachedThreshold={0.5}
-                ListFooterComponent={renderFooter}
-              />
+                  data={personajes}
+                  renderItem={renderItem}
+                  keyExtractor={(item, index) => index.toString()}
+                  onEndReached={handleLoadMore}
+                  onEndReachedThreshold={0.5}
+                  ListFooterComponent={renderFooter}
+                />
               )}
-
-              
             </View>
           </View>
         </View>
@@ -242,20 +244,20 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     opacity: 0.9,
   },
-  dropdownBtn:{
-    marginTop:20,
-    width:'100%',
-    height:40,
+  dropdownBtn: {
+    marginTop: 20,
+    width: '100%',
+    height: 40,
     backgroundColor: '#FFF',
     borderRadius: 30,
     borderWidth: 1,
     borderColor: '#444',
   },
-  dropdownText:{
+  dropdownText: {
     textAlign: 'left',
-    fontSize:14,
+    fontSize: 14,
   },
-  dropdown:{
-   borderRadius:8,
-  }
+  dropdown: {
+    borderRadius: 8,
+  },
 });

@@ -10,12 +10,12 @@ import AuthStack from './AuthStack';
 
 const MainStack = () => {
   
-  const { isLoading, userToken, userName } = useContext(AuthContext);
+  const { isLoading, userToken } = useContext(AuthContext);
 
   if (isLoading) {
     return (
       <View
-        style={{ flex: 1, justifyContente: 'center', alignItems: 'center' }}
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
       >
         <ActivityIndicator size={'large'} />
       </View>

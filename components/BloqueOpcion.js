@@ -3,6 +3,7 @@ import { ImageBackground, StyleSheet, TouchableOpacity, Text } from 'react-nativ
 
 
 const Opcion = (props) => {
+  
   const { onPress, text, uri } = props;
 
   const img = {uri: uri}
