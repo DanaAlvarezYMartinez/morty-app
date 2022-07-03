@@ -21,7 +21,7 @@ export default Btn
 
 const styles = StyleSheet.create({
     btnContainer: {
-      maxWidth:'50%',
+      minWidth:'50%',
       backgroundColor: '#a3f92f',
       paddingVertical:10,
       paddingHorizontal:20,

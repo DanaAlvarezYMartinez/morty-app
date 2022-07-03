@@ -21,13 +21,13 @@ export default Opcion;
 
 const styles = StyleSheet.create({
   btnContainer: {
-    height: 130,
-    width: 130,
+    height: '50%',
+    width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    marginVertical: 10,
+    marginVertical: 20,
   },
   Text: {
     color: '#000',
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
     borderRadius:16
   },
   img:{
-      height:130,
-      width:130,
+      minHeight:150,
+      minWidth:150,
       justifyContent:'center',
       alignItems:'center',
   }

@@ -25,7 +25,7 @@ const LocationDetail = ({ route }) => {
   const [page, setPage] = useState(0);
   const [urls, setUrls] = useState([]);
 
-  const limit = 10;
+  const limit = 14;
 
   const getResidents = async () => {
     let promises = [];
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-    maxHeight: '75%',
+    maxHeight: '80%',
   },
   residentsContainer: {
     flex: 1,

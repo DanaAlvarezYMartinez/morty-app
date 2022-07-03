@@ -8,12 +8,9 @@ const Heart = ({ onPress, color }) => {
     <TouchableWithoutFeedback style={styles.container} onPress={onPress}>
       <Icon
         name='heart'
-        size={40}
+        size={20}
         color={color}
-        style={{position:'absolute',
-        top:40,
-        right:50,
-        zIndex:9}}
+        style={{marginLeft:20}}
       />
     </TouchableWithoutFeedback>
   );
@@ -25,10 +22,6 @@ const styles = StyleSheet.create({
     container: {
         width:40,
         height:40,
-        position:'absolute',
-        top:40,
-        right:50,
-        zIndex:9,
     },
   });
   

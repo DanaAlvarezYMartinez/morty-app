@@ -24,7 +24,7 @@ const Profile = ({ navigation }) => {
         <View style={styles.profileContainer}>
           <Text style={styles.userName}>¡Bienvenid@ {userName}!</Text>
 
-          <View>
+          <View style={{flex:1,alignItems:'center', flexDirection:'column', justifyContent:'space-evenly', marginTop:10}}>
             <Opcion
               text='Ver Personajes'
               uri='https://i.pinimg.com/564x/7f/bb/89/7fbb89e5bf3235e4c2c0d4a4038acb2d.jpg'

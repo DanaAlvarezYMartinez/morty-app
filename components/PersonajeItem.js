@@ -23,13 +23,13 @@ const PersonajeItem = ({ navigation, personaje }) => {
 
 const styles = StyleSheet.create({
   container: {
+    width:300,
+    flex:1,
     flexDirection: 'row',
-    width: 300,
     padding: 16,
     height: 150,
     borderRadius: 16,
     marginVertical: 5,
-    borderBottomWidth: 1,
     backgroundColor: '#000',
   },
   img: {

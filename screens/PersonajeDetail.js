@@ -113,22 +113,35 @@ const PersonajeDetail = ({ route, navigation }) => {
         ) : (
           <View style={styles.personajeContainer}>
             <View style={styles.imageContainer}>
-              <Text style={styles.name}>{personaje.name}</Text>
-              <Heart onPress={toggleFav} color={color} />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '85%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 10,
+                }}
+              >
+                <Text style={styles.name}>{personaje.name}</Text>
+                <Heart onPress={toggleFav} color={color} />
+              </View>
+
               <Image
                 source={{ uri: personaje.image }}
                 style={styles.img}
               ></Image>
               <View style={styles.infoContainer}>
-                <Text style={styles.text}>Especie: {personaje.species}</Text>
-                <Text style={styles.text}>
-                  Tipo: {personaje.type === '' ? 'unknown' : personaje.type}
-                </Text>
-                <TouchableHighlight onPress={locationDetails}>
-                  <View>
-                    <Text style={styles.location}>{location} </Text>
-                  </View>
-                </TouchableHighlight>
+                <View style={{flexDirection:'column',alignItems:'center', height:'50%', justifyContent:'center'}}>
+                  <Text style={styles.text}>Especie: {personaje.species}</Text>
+                  <Text style={styles.text}>
+                    Tipo: {personaje.type === '' ? 'unknown' : personaje.type}
+                  </Text>
+                  <TouchableHighlight onPress={locationDetails}>
+                    <View>
+                      <Text style={styles.location}>{location} </Text>
+                    </View>
+                  </TouchableHighlight>
+                </View>
               </View>
             </View>
 
@@ -194,7 +207,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: 10,
   },
   text: {
     color: '#fff',
@@ -223,6 +235,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
-    marginTop: 15,
   },
 });
