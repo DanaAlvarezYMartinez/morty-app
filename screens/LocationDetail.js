@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
-  ScrollView,
   StyleSheet,
   Text,
   View,
   SafeAreaView,
   ImageBackground,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import axios from 'axios';
-import List from '../components/List';
+import ListItem from '../components/ListItem';
 
 const image = {
   uri: 'https://i.pinimg.com/564x/07/ad/01/07ad01b520f8b9e67776680c995a236d.jpg',
@@ -21,13 +21,14 @@ const LocationDetail = ({ route }) => {
   const [location, setLocation] = useState([]);
   const [residents, setResidents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [urls, setUrls] = useState([]);
 
-  const getLocationInfo = async () => {
+  const limit = 10;
+
+  const getResidents = async () => {
     let promises = [];
-    setIsLoading(true);
-    const res = await axios.get(url);
-    setLocation(res.data);
-    for (const url2 of res.data.residents) {
+    for (const url2 of urls.slice(page * limit, (page + 1) * limit)) {
       promises.push(
         axios.get(url2).then((r) => {
           setResidents((residents) => [...residents, r.data]);
@@ -37,12 +38,41 @@ const LocationDetail = ({ route }) => {
     Promise.all(promises).then(() => {
       console.log('success');
     });
+  };
+
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
+
+  const renderFooter = () => {
+    return isLoading ? (
+      <View style={styles.loader}>
+        <ActivityIndicator size='large' animating={true} color='#fff' />
+      </View>
+    ) : null;
+  };
+
+  const renderItem = ({ item }) => {
+    return <ListItem item={item} />;
+  };
+
+  const getLocationInfo = async () => {
+    setIsLoading(true);
+    const res = await axios.get(url);
+    setLocation(res.data);
+    setUrls(res.data.residents);
     setIsLoading(false);
   };
 
   useEffect(() => {
+    getResidents();
+  }, [page, urls]);
+
+  useEffect(() => {
     getLocationInfo();
   }, []);
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -58,9 +88,18 @@ const LocationDetail = ({ route }) => {
               <View style={styles.residentsContainer}>
                 <Text style={styles.residentsTitle}>Residentes</Text>
 
-                <ScrollView contentContainerStyle={styles.scroll}>
-                  <List list={residents}></List>
-                </ScrollView>
+                <View style={styles.scroll}>
+                <FlatList
+                  data={residents}
+                  renderItem={renderItem}
+                  keyExtractor={(item, index) => index.toString()}
+                  onEndReached={handleLoadMore}
+                  onEndReachedThreshold={0.5}
+                  ListFooterComponent={renderFooter}
+                />
+
+                </View>
+
               </View>
             </View>
           )}
@@ -119,6 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    maxHeight:'75%'
   },
   residentsContainer: {
     flex: 1,
